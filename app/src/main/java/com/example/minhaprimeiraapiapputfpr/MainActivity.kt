@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.title = getString(R.string.app_name)
         setContentView(view)
         setupView()
     }
@@ -48,7 +50,14 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     is Result.Success -> {
-                        val adapter = ItemAdapter(result.data)
+                        val adapter = ItemAdapter(result.data) { item ->
+                            startActivity(
+                                ItemDetailActivity.newIntent(
+                                    context = this@MainActivity,
+                                    itemId = item.id
+                                )
+                            )
+                        }
                         binding.recyclerView.adapter = adapter
                     }
                 }
